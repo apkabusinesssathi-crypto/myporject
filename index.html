@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5Y83VK8HV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-N5Y83VK8HV');
+  </script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Mahalaxmi Nagar 51 Nagpur | Premium Residential Plots | Coming Soon</title>
@@ -4014,25 +4024,45 @@
       WHATSAPP_NUMBER: "919604402448",
       ANALYTICS: {
         META_PIXEL_ID: "",
-        GA_MEASUREMENT_ID: "",
+        GA_MEASUREMENT_ID: "G-N5Y83VK8HV",
         GTM_CONTAINER_ID: ""
       }
     };
 
     function trackEvent(eventName, eventParams) {
       eventParams = eventParams || {};
+      
+      // Automatic PII Sanitation & Non-PII Metadata Enrichment
+      var sanitized = {
+        page_path: window.location.pathname || '/'
+      };
+
+      for (var key in eventParams) {
+        if (Object.prototype.hasOwnProperty.call(eventParams, key)) {
+          // Strictly reject any personally identifiable information from being sent to GA4
+          if (/^(name|username|phone|userphone|email|address|message|custommessage)$/i.test(key)) {
+            continue;
+          }
+          sanitized[key] = eventParams[key];
+        }
+      }
+
       try {
+        if (typeof gtag === 'function') {
+          gtag('event', eventName, sanitized);
+        }
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
           event: eventName,
-          ...eventParams,
+          ...sanitized,
           timestamp: new Date().toISOString()
         });
-        if (typeof fbq === 'function') fbq('trackCustom', eventName, eventParams);
-        if (typeof gtag === 'function') gtag('event', eventName, eventParams);
-        console.log(`[Event Tracked]: ${eventName}`, eventParams);
+        if (typeof fbq === 'function') {
+          fbq('trackCustom', eventName, sanitized);
+        }
+        console.log(`[GA4 Event]: ${eventName}`, sanitized);
       } catch (e) {
-        console.warn("[Tracking Exception]", e);
+        console.warn("[GA4 Tracking Exception]", e);
       }
     }
 
@@ -4062,11 +4092,11 @@
     </nav>
 
     <div class="nav-actions">
-      <a href="tel:+919604402448" class="nav-phone" onclick="trackEvent('call_click', {location:'nav_bar'})">
+      <a href="tel:+919604402448" class="nav-phone">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.68 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0122 16.92z"/></svg>
         <span>+91 96044 02448</span>
       </a>
-      <a href="#visit" class="btn btn-gold nav-cta btn-sm" onclick="trackEvent('nav_cta_click', {cta:'book_site_visit'})">
+      <a href="#visit" class="btn btn-gold nav-cta btn-sm">
         Book Site Visit
       </a>
       <button class="hamburger" onclick="openMobileMenu()" aria-label="Open Navigation Menu">
@@ -4128,15 +4158,15 @@
       </p>
 
       <div class="btn-row">
-        <a href="#visit" class="btn btn-gold" onclick="trackEvent('hero_cta_click', {cta:'book_site_visit'})">
+        <a href="#visit" class="btn btn-gold">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"/></svg>
           Book Private Site Visit
         </a>
-        <a id="heroWaBtn" href="#" target="_blank" rel="noopener" class="btn btn-whatsapp" onclick="trackEvent('whatsapp_click', {location:'hero'})">
+        <a id="heroWaBtn" href="#" target="_blank" rel="noopener" class="btn btn-whatsapp">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.42-1.36a9.9 9.9 0 004.62 1.14h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2z"/></svg>
           WhatsApp: +91 96044 02448
         </a>
-        <a href="tel:+919604402448" class="btn btn-outline" onclick="trackEvent('call_click', {location:'hero'})">
+        <a href="tel:+919604402448" class="btn btn-outline">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.68 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0122 16.92z"/></svg>
           Call: +91 96044 02448
         </a>
@@ -6126,10 +6156,10 @@
               BOOK A SITE VISIT (Instant WhatsApp Confirmation)
             </button>
             <div class="btn-row" style="justify-content:center;">
-              <a href="tel:+919604402448" class="btn btn-outline btn-sm" onclick="trackEvent('call_click', {location:'form_secondary'})">
+              <a href="tel:+919604402448" class="btn btn-outline btn-sm">
                 CALL DIRECT: +91 96044 02448
               </a>
-              <a id="formWaDirectBtn" href="https://wa.me/919604402448?text=Hello%20Mahalaxmi%2051%20Sales%2C%20I%20would%20like%20to%20know%20plot%20options%20and%20schedule%20a%20site%20visit" target="_blank" rel="noopener" class="btn btn-outline btn-sm" onclick="trackEvent('whatsapp_click', {location:'form_secondary'})">
+              <a id="formWaDirectBtn" href="https://wa.me/919604402448?text=Hello%20Mahalaxmi%2051%20Sales%2C%20I%20would%20like%20to%20know%20plot%20options%20and%20schedule%20a%20site%20visit" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
                 WHATSAPP: +91 96044 02448
               </a>
             </div>
@@ -6564,7 +6594,11 @@
           frame.scrollTo({ left: targetX, behavior: 'smooth' });
         }
 
-        trackEvent('masterplan_sector_select', { sector: sectorKey, title: data.title });
+        // GA4 Masterplan Interaction Event
+        trackEvent('masterplan_view', {
+          interaction_type: 'sector_select',
+          sector_name: data.title
+        });
       };
 
       // Modal Fullscreen Zoom & Pan State
@@ -6592,7 +6626,12 @@
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
         resetMasterplanZoom();
-        trackEvent('masterplan_modal_open');
+
+        // GA4 Masterplan Fullscreen Modal Event
+        trackEvent('masterplan_view', {
+          interaction_type: 'modal_open',
+          sector_name: 'All Sectors'
+        });
       };
 
       window.closeMasterplanModal = function() {
@@ -6611,7 +6650,6 @@
       window.zoomMasterplan = function(delta) {
         mpZoomLevel = Math.max(0.75, Math.min(3.5, mpZoomLevel + delta));
         applyMasterplanTransform();
-        trackEvent('masterplan_zoom', { zoom: mpZoomLevel });
       };
 
       window.resetMasterplanZoom = function() {
@@ -6699,16 +6737,49 @@
         });
       });
 
+      // Form Interaction & Submit Tracking Engine (Zero PII transmitted)
       var form = document.getElementById('siteVisitForm');
       if (form) {
+        var formStarted = false;
+        var markFormStarted = function() {
+          if (!formStarted) {
+            formStarted = true;
+            trackEvent('site_visit_form_start', {
+              form_id: 'siteVisitForm'
+            });
+          }
+        };
+
+        form.addEventListener('focusin', markFormStarted);
+        form.addEventListener('change', markFormStarted);
+        form.addEventListener('click', function(e) {
+          if (e.target.tagName === 'INPUT' || e.target.closest('.pill-radio-label')) {
+            markFormStarted();
+          }
+        });
+
         form.addEventListener('submit', function (e) {
           e.preventDefault();
           var formData = new FormData(form);
-          var name = formData.get('userName') || '';
-          var phone = formData.get('userPhone') || '';
-          var budget = formData.get('budget') || '₹45–50L';
+          var name = (formData.get('userName') || '').toString().trim();
+          var phone = (formData.get('userPhone') || '').toString().trim();
+          var budget = formData.get('budget') || '₹45–55L';
           var propertyType = formData.get('propertyType') || 'Residential Plot';
-          var timeline = formData.get('timeline') || 'Within 30 Days';
+          var timeline = formData.get('timeline') || 'This Weekend';
+
+          // Validate required fields before tracking and redirecting
+          if (!name || !phone) {
+            alert('Please enter your name and phone number to schedule a site visit.');
+            return;
+          }
+
+          // GA4 Key Event: site_visit_form_submit (Strictly Anonymous Metadata, NO PII)
+          trackEvent('site_visit_form_submit', {
+            form_id: 'siteVisitForm',
+            budget_range: budget,
+            property_type: propertyType,
+            timeline: timeline
+          });
 
           var message = "Hello, I would like to book a Site Visit for Mahalaxmi Nagar\u201351, Nagpur.\n" +
             "Name: " + name + "\n" +
@@ -6718,17 +6789,96 @@
             "Timeline: " + timeline + "\n" +
             "Please confirm site visit slots and directions.";
 
-          trackEvent('site_visit_form_submit', {
-            name: name,
-            phone: phone,
-            budget: budget,
-            propertyType: propertyType,
-            timeline: timeline
-          });
-
           window.open(getWhatsAppUrl(message), '_blank');
         });
       }
+
+      // Major Landmark Section View Tracker (IntersectionObserver - Exactly Once per Section)
+      if ('IntersectionObserver' in window) {
+        var trackedSections = {};
+        var sectionObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
+              var sectionId = entry.target.id;
+              if (sectionId && !trackedSections[sectionId]) {
+                trackedSections[sectionId] = true;
+                trackEvent('section_view', {
+                  section_name: sectionId
+                });
+              }
+            }
+          });
+        }, { threshold: [0.25] });
+
+        var monitoredSectionIds = [
+          'top', 'masterplan', 'location', 'lifestyle', 'legacy', 'qualification', 'visit', 'faqs'
+        ];
+
+        monitoredSectionIds.forEach(function(sId) {
+          var el = document.getElementById(sId);
+          if (el) sectionObserver.observe(el);
+        });
+      }
+
+      // Global Delegator for WhatsApp, Phone Calls, and General CTAs (Deduplicated)
+      document.addEventListener('click', function(e) {
+        var targetAnchor = e.target.closest('a, button');
+        if (!targetAnchor) return;
+
+        var href = targetAnchor.getAttribute('href') || '';
+        var btnText = (targetAnchor.innerText || targetAnchor.getAttribute('aria-label') || '').trim().replace(/\s+/g, ' ').substring(0, 50);
+        var location = 'unknown';
+
+        var closestSec = targetAnchor.closest('section[id], header, footer, #mobile-menu, .masterplan-sector-hud, .modal');
+        if (closestSec) {
+          location = closestSec.id || closestSec.tagName.toLowerCase().replace(/[^a-z0-9]/g, '');
+        }
+        if (targetAnchor.id) {
+          if (targetAnchor.id === 'mobileStickyWaBtn' || targetAnchor.id === 'mobileStickyCallBtn' || targetAnchor.id === 'mobileStickyVisitBtn') {
+            location = 'mobile_sticky_bar';
+          } else if (targetAnchor.id === 'heroWaBtn') {
+            location = 'hero';
+          } else if (targetAnchor.id === 'desktopFabWa') {
+            location = 'floating_button';
+          } else if (targetAnchor.id === 'drawerWaBtn') {
+            location = 'drawer_menu';
+          }
+        }
+
+        // 1. WhatsApp Click Tracking
+        if (href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp.com') !== -1 || targetAnchor.classList.contains('btn-whatsapp')) {
+          trackEvent('whatsapp_click', {
+            link_location: location,
+            button_text: btnText || 'WhatsApp'
+          });
+          return;
+        }
+
+        // 2. Phone Call Click Tracking
+        if (href.indexOf('tel:') === 0) {
+          trackEvent('phone_call_click', {
+            link_location: location,
+            button_text: btnText || '+91 96044 02448'
+          });
+          return;
+        }
+
+        // 3. CTA Click Tracking (for non-whatsapp and non-tel navigation CTAs)
+        if (targetAnchor.classList.contains('btn') || targetAnchor.classList.contains('nav-cta')) {
+          var ctaType = 'other';
+          if (href === '#visit' || btnText.toLowerCase().indexOf('visit') !== -1) ctaType = 'site_visit';
+          else if (href === '#masterplan' || btnText.toLowerCase().indexOf('masterplan') !== -1) ctaType = 'masterplan';
+          else if (href === '#location' || btnText.toLowerCase().indexOf('location') !== -1) ctaType = 'location';
+          else if (href === '#pricing' || btnText.toLowerCase().indexOf('price') !== -1) ctaType = 'pricing';
+          else if (href === '#faqs' || btnText.toLowerCase().indexOf('faq') !== -1) ctaType = 'faq';
+
+          trackEvent('cta_click', {
+            cta_type: ctaType,
+            button_text: btnText || 'CTA Button',
+            location: location
+          });
+        }
+      });
 
     })();
 
@@ -6742,7 +6892,11 @@
 
     function openGenericWhatsApp(context) {
       var msg = "Hello, I am inquiring regarding Mahalaxmi Nagar\u201351, Nagpur. Context: " + (context || "Project Details") + ". Please share pricing and plot details.";
-      trackEvent('whatsapp_click', { context: context });
+      var loc = (context || "general").toLowerCase().replace(/[^a-z0-9]+/g, '_');
+      trackEvent('whatsapp_click', {
+        link_location: loc,
+        button_text: context || 'WhatsApp Inquiry'
+      });
       window.open(getWhatsAppUrl(msg), '_blank');
     }
 
