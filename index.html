@@ -3028,168 +3028,805 @@
     }
 
     /* ==========================================================================
-       COMPREHENSIVE MOBILE-FIRST OVERRIDES (max-width: 767px)
+       MOBILE-FIRST OVERRIDES — Comprehensive, Root-Cause-Fix, Zero Overflow
+       Tested breakpoints: 320, 360, 375, 390, 412, 430, 768
        ========================================================================== */
-    @media (max-width: 767px) {
 
-      /* --- Base & Layout --- */
-      .wrap { padding: 0 16px; }
-      .section { padding: 64px 0; }
-      .section-head { margin-bottom: 32px; }
-      .section-head p { font-size: 15px; }
-
-      h1 { font-size: clamp(34px, 9vw, 48px); }
-      h2 { font-size: clamp(26px, 7vw, 36px); }
-      h3 { font-size: clamp(18px, 5vw, 24px); }
-
-      /* --- Hero --- */
-      .hero { padding: 110px 0 100px; min-height: 100svh; }
-      .hero-content { padding: 0 16px; }
-      .hero-badge-row { gap: 10px; margin-bottom: 18px; }
-      .status-pill { font-size: 9.5px; padding: 5px 10px; }
-
-      .hero-h1 { font-size: clamp(36px, 9vw, 52px); line-height: 1.06; margin-bottom: 16px; }
-      .hero-h1 .gold-line { font-size: clamp(28px, 8vw, 44px); }
-
-      .hero-price-anchor {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        padding: 12px 16px;
-        margin: 14px 0 22px;
-        width: 100%;
+    /* ─── Shared: prevent any element from ever exceeding viewport width ─── */
+    @media (max-width: 991px) {
+      *,
+      *::before,
+      *::after {
+        max-width: 100%;
         box-sizing: border-box;
       }
-      .hero-price-anchor .val { font-size: clamp(32px, 10vw, 44px); }
-      .hero-price-anchor .label { font-size: 10px; letter-spacing: 0.12em; }
+      /* Remove fixed pixel widths on any element that might overflow */
+      html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+      }
+      /* Images: always responsive */
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+      /* Prevent SVG from blowing out layout */
+      svg:not(.masterplan-svg):not(.fab svg):not(.ms-btn svg) {
+        max-width: 100%;
+      }
+    }
 
-      .hero-sub { font-size: 15px; margin-bottom: 24px; max-width: 100%; }
+    /* ─── 768px and below: Tablet and Mobile ─── */
+    @media (max-width: 768px) {
 
-      /* Make hero CTA buttons full-width stack */
+      /* Base layout */
+      .wrap, .wrap-narrow {
+        padding: 0 18px;
+      }
+      .section {
+        padding: 60px 0;
+      }
+      .section-head {
+        margin-bottom: 28px;
+        max-width: 100%;
+      }
+      .section-head p {
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      /* Typography */
+      h2 {
+        font-size: clamp(24px, 6.5vw, 34px);
+        line-height: 1.2;
+      }
+      h3 {
+        font-size: clamp(18px, 4.8vw, 24px);
+        line-height: 1.3;
+      }
+
+      /* Buttons — contain within viewport */
+      .btn {
+        white-space: normal;
+        word-break: break-word;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
       .btn-row {
         flex-direction: column;
         gap: 10px;
         width: 100%;
+        align-items: stretch;
       }
       .btn-row .btn {
         width: 100%;
         justify-content: center;
-        padding: 16px 20px;
-        font-size: 13px;
+        padding: 15px 16px;
+        font-size: 12.5px;
+        letter-spacing: 0.06em;
+        text-align: center;
+        min-height: 48px;
       }
 
-      /* Hero qual tags — 2 per row */
+      /* Navigation */
+      header.nav {
+        padding: 14px 16px;
+      }
+      header.nav.scrolled {
+        padding: 10px 16px;
+      }
+      .brand-title {
+        font-size: 17px;
+      }
+      .brand-sub {
+        font-size: 8.5px;
+        letter-spacing: 0.14em;
+      }
+
+      /* Hero */
+      .hero {
+        padding: 100px 0 100px;
+        min-height: 100svh;
+      }
+      .hero-content {
+        padding: 0 18px;
+      }
+      .hero-badge-row {
+        gap: 8px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .eyebrow {
+        font-size: 9.5px;
+        letter-spacing: 0.16em;
+        gap: 8px;
+        max-width: 100%;
+      }
+      .eyebrow::before {
+        width: 14px;
+        flex-shrink: 0;
+      }
+      .status-pill {
+        font-size: 9px;
+        padding: 5px 10px;
+        letter-spacing: 0.12em;
+      }
+      .hero-h1 {
+        font-size: clamp(34px, 8.5vw, 50px);
+        line-height: 1.07;
+        margin-bottom: 14px;
+      }
+      .hero-h1 .gold-line {
+        font-size: clamp(26px, 7.5vw, 42px);
+        display: block;
+      }
+      /* Price anchor: stack vertically, full width */
+      .hero-price-anchor {
+        display: block;
+        width: 100%;
+        padding: 12px 14px;
+        margin: 12px 0 20px;
+        box-sizing: border-box;
+      }
+      .hero-price-anchor .val {
+        font-size: clamp(28px, 8vw, 40px);
+        display: block;
+        line-height: 1.1;
+      }
+      .hero-price-anchor .label {
+        font-size: 9.5px;
+        letter-spacing: 0.1em;
+        display: block;
+        margin-top: 4px;
+      }
+      .hero-sub {
+        font-size: 14.5px;
+        margin-bottom: 22px;
+        max-width: 100%;
+        line-height: 1.62;
+      }
       .hero-qual-tags {
-        gap: 12px;
-        margin-top: 24px;
-        padding-top: 18px;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 16px;
+        max-width: 100%;
       }
-      .hero-tag { font-size: 11px; }
+      .hero-tag {
+        font-size: 11px;
+        gap: 6px;
+      }
 
-      /* --- Trust Strip --- */
+      /* Trust Strip */
       .trust-proof-grid {
         grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .trust-proof-item {
+        flex-direction: column;
+        gap: 6px;
+      }
+      .trust-proof-text h5 { font-size: 12px; }
+      .trust-proof-text p { font-size: 11px; line-height: 1.4; }
+
+      /* Plots vs Flats Table — horizontal scroll INSIDE container only */
+      .plots-vs-flats-table-wrap {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        border-radius: var(--radius-md);
+        /* Crucial: the container clips, not the page */
+        max-width: 100%;
+      }
+      .pvf-table {
+        min-width: 520px; /* Forces the table to have enough room */
+        width: max-content;
+      }
+      .pvf-table th, .pvf-table td {
+        padding: 11px 10px;
+        font-size: 12px;
+      }
+      .pvf-table th {
+        font-size: 10px;
+        letter-spacing: 0.08em;
+      }
+      .pvf-tag-yes, .pvf-tag-no {
+        font-size: 12px;
+      }
+
+      /* Pricing Cards — single column */
+      .plot-config-grid {
+        grid-template-columns: 1fr;
         gap: 14px;
       }
-      .trust-proof-item { flex-direction: column; align-items: flex-start; gap: 8px; }
-
-      /* --- Plots vs Flats Table --- */
-      .plots-vs-flats-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      .pvf-table { min-width: 480px; }
-      .pvf-table th, .pvf-table td { padding: 12px 10px; font-size: 12px; }
-
-      /* --- Pricing Cards --- */
-      .plot-config-grid { grid-template-columns: 1fr; gap: 16px; }
-      .plot-config-card { padding: 24px 20px; }
-      .plot-config-card.popular { transform: none; }
-
-      /* --- Infrastructure Cards --- */
-      .township-standards-grid { grid-template-columns: 1fr; gap: 12px; }
-
-      /* --- Masterplan --- */
-      .masterplan-svg-frame {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+      .plot-config-card {
+        padding: 22px 18px;
       }
-      .masterplan-svg-frame svg { min-width: 640px; }
-      .masterplan-filter-bar { flex-wrap: wrap; gap: 8px; }
-      .masterplan-pill { font-size: 10px; padding: 6px 12px; }
+      .plot-config-card.popular {
+        transform: none; /* remove the translateY(-4px) offset */
+      }
+      .plot-config-card h3 {
+        font-size: 19px;
+      }
+      .plot-price-val {
+        font-size: 24px;
+      }
 
-      /* --- Location / Aerial pins --- */
-      .location-landmark-grid {
-        grid-template-columns: 1fr !important;
+      /* Infrastructure / Standards Grid */
+      .township-standards-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 24px;
+      }
+      .standard-card {
+        padding: 20px 18px;
+      }
+
+      /* Pillar cards */
+      .value-pillars-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .pillar-card {
+        min-height: unset;
+        padding: 26px 22px;
+      }
+
+      /* Project Reveal cinematic box */
+      .reveal-cinematic {
+        padding: 36px 20px;
+        border-radius: var(--radius-md);
+      }
+      .reveal-cinematic h2 {
+        font-size: clamp(24px, 6.5vw, 36px);
+        line-height: 1.15;
+      }
+      .reveal-cinematic p {
+        font-size: 15px;
+      }
+      .representative-badge {
+        font-size: 10px;
+        padding: 5px 10px;
+      }
+
+      /* ─── MASTERPLAN — critical: only the SVG viewport scrolls ─── */
+      .masterplan-container {
+        padding: 0;
+        border-radius: var(--radius-sm);
+      }
+      .masterplan-topbar {
+        padding: 10px 12px;
+        flex-direction: column;
+        align-items: flex-start;
         gap: 10px;
       }
-      .location-hud-card { padding: 16px; }
-      .loc-time-badge { font-size: 9px; }
-
-      /* --- Amenities --- */
-      .deck-stage { min-height: 480px; }
-      .amenity-shuffle-card { border-radius: 12px; }
-      .amenity-card-body { padding: 18px 16px 16px; }
-      .amenity-card-footer { flex-direction: column; gap: 8px; }
-      .amenity-card-footer .btn { width: 100%; justify-content: center; }
-      .deck-thumb-strip { gap: 6px; }
-      .deck-thumb-chip { padding: 6px; gap: 5px; font-size: 9px; }
-      .deck-thumb-chip img { width: 26px; height: 26px; }
-      .amenity-mode-toggle { display: none; } /* hide grid/deck toggle on mobile - deck is better */
-
-      /* Amenities grid mode on mobile */
-      .amenities-grid-4 { grid-template-columns: 1fr 1fr !important; gap: 12px; }
-
-      /* --- Developer Legacy / Story --- */
-      .story-transition-box { flex-direction: column !important; gap: 20px; }
-      .story-side { padding: 24px 20px !important; }
-      .portfolio-strip { gap: 8px; }
-      .portfolio-card { padding: 12px 10px; }
-      .portfolio-card .num { font-size: 22px; }
-
-      /* --- Positioning Cards Grid --- */
-      .positioning-grid { grid-template-columns: 1fr !important; gap: 12px; }
-      .positioning-card { padding: 22px 18px; }
-
-      /* --- Buyer Qualification --- */
-      .qual-two-col { flex-direction: column !important; gap: 20px; }
-      .qual-col { width: 100% !important; }
-
-      /* --- Site Visit Form --- */
-      .visit-form-container { padding: 24px 16px !important; }
-      .visit-form-grid { grid-template-columns: 1fr !important; gap: 14px; }
-      .form-text-input, .form-select { font-size: 16px !important; padding: 14px 16px; } /* 16px prevents iOS zoom */
-      .pill-selector-row { flex-wrap: wrap; gap: 6px; }
-      .pill-radio-label { font-size: 10px; padding: 6px 12px; }
-
-      /* --- FAQ --- */
-      .faq-item summary { font-size: 15px; padding: 16px 14px; }
-      .faq-answer { font-size: 14px; padding: 14px; }
-      .faq-search-input { font-size: 16px !important; } /* prevent iOS zoom */
-
-      /* --- Footer --- */
-      .footer-columns { flex-direction: column !important; gap: 28px; }
-      .footer-col { width: 100% !important; }
-      .footer-brand h2 { font-size: 28px; }
-
-      /* --- Floating Desktop FABs — hide on mobile (sticky bar handles it) --- */
-      .floating-desktop-actions { display: none !important; }
-
-      /* --- Mobile sticky bar — add safe area for notched phones --- */
-      .mobile-sticky-bar {
-        padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      .mp-title-info span {
+        font-size: 10px;
+      }
+      .mp-controls {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .mp-btn {
+        padding: 6px 10px;
+        font-size: 10px;
+        white-space: nowrap;
+      }
+      /* The viewport itself scrolls horizontally — NOT the page */
+      .masterplan-viewport {
+        min-height: 300px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        padding: 12px;
+        display: block; /* override flex to allow natural scroll */
+      }
+      /* The SVG has a fixed width — the viewport scrolls to show it */
+      .masterplan-svg {
+        width: 900px; /* fixed width so SVG is readable */
+        max-width: none; /* override the global max-width:100% for this SVG */
+        height: auto;
+      }
+      /* Plot inspector: keep inside viewport */
+      #plotInspector {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        max-width: none;
+        font-size: 13px;
+        padding: 14px 16px;
+      }
+      .masterplan-legend {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px 14px 10px;
+        font-size: 10px;
       }
 
-      /* --- Prevent horizontal overflow --- */
-      section, .section { overflow-x: hidden; max-width: 100vw; }
+      /* ─── Location Section ─── */
+      .aerial-showcase-img {
+        max-height: 320px;
+        object-fit: cover;
+        object-position: center 30%;
+      }
+      .landmark-transit-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .landmark-transit-card {
+        padding: 18px 16px;
+      }
+      .landmark-card-body h4 { font-size: 15px; }
+      .landmark-card-body p { font-size: 12.5px; }
+      .aerial-proximity-checklist-strip {
+        grid-template-columns: 1fr 1fr;
+        padding: 12px 14px;
+        gap: 8px;
+      }
+      .aerial-check-chip {
+        font-size: 11.5px;
+        gap: 6px;
+      }
 
-      /* --- Make all images responsive --- */
-      img { max-width: 100%; height: auto; }
+      /* ─── Amenities Section ─── */
+      .amenities-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 24px;
+      }
+      .view-mode-toggle {
+        width: 100%;
+      }
+      .view-mode-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 8px 10px;
+        font-size: 11px;
+      }
+      /* Deck stage height tuned by screen */
+      .deck-stage {
+        height: 680px;
+      }
+      /* Ensure amenity cards don't push outside viewport */
+      .amenity-shuffle-card {
+        max-width: min(820px, calc(100vw - 36px));
+        border-radius: 10px;
+      }
+      .amenity-shuffle-card[data-pos="1"],
+      .amenity-shuffle-card[data-pos="-1"] {
+        transform: translate3d(calc(-50% + 16px), 10px, -40px) scale(0.94) rotate(2deg);
+        opacity: 0.72;
+      }
+      .amenity-shuffle-card[data-pos="-1"] {
+        transform: translate3d(calc(-50% - 16px), 10px, -40px) scale(0.94) rotate(-2deg);
+      }
+      .amenity-shuffle-card[data-pos="2"],
+      .amenity-shuffle-card[data-pos="-2"] {
+        transform: translate3d(calc(-50% + 30px), 22px, -80px) scale(0.87) rotate(4deg);
+        opacity: 0.42;
+      }
+      .amenity-shuffle-card[data-pos="-2"] {
+        transform: translate3d(calc(-50% - 30px), 22px, -80px) scale(0.87) rotate(-4deg);
+      }
+      .amenity-card-media {
+        height: clamp(180px, 40vw, 280px);
+      }
+      .amenity-card-content {
+        padding: 16px 16px 18px;
+        gap: 10px;
+      }
+      .amenity-card-title {
+        font-size: clamp(18px, 5vw, 24px);
+      }
+      .amenity-card-desc {
+        font-size: 13.5px;
+      }
+      .amenity-features-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .amenity-card-footer {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .amenity-card-footer .btn-sm {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        padding: 11px 12px;
+        font-size: 11px;
+      }
+      /* Deck controls */
+      .deck-controls-bar {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px 14px;
+        margin-top: 20px;
+      }
+      .deck-nav-btn {
+        padding: 8px 14px;
+        font-size: 11px;
+      }
+      .deck-shuffle-btn {
+        padding: 8px 16px;
+        font-size: 11px;
+      }
+      /* Thumbnail strip — wrap on small screens */
+      .deck-thumbnails-strip {
+        gap: 8px;
+        margin-top: 16px;
+        padding: 0 2px;
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+      .deck-thumb-chip {
+        flex-shrink: 0;
+        padding: 6px 10px;
+        gap: 6px;
+      }
+      .deck-thumb-chip span {
+        font-size: 10.5px;
+        white-space: nowrap;
+      }
+      .deck-thumb-chip img {
+        width: 22px;
+        height: 22px;
+      }
+      /* Classic amenities subgrid */
+      .classic-amenities-subgrid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .amenity-benchmark-notice {
+        padding: 16px 18px;
+        font-size: 12px;
+        margin-top: 24px;
+      }
+
+      /* ─── Corridor Flow ─── */
+      .corridor-flow-item {
+        grid-template-columns: 40px 1fr;
+        gap: 16px;
+        padding: 20px 0;
+      }
+      .corridor-flow-item .num {
+        font-size: 13px;
+      }
+      .corridor-flow-item h3 {
+        font-size: 17px;
+        line-height: 1.3;
+      }
+      .corridor-flow-item p {
+        font-size: 14px;
+        margin-top: 4px;
+      }
+
+      /* ─── Positioning Cards ─── */
+      .positioning-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .positioning-card {
+        padding: 26px 20px;
+      }
+
+      /* ─── Developer Legacy / Story ─── */
+      .story-transition-box {
+        grid-template-columns: 1fr;
+      }
+      .story-side.established {
+        border-bottom: 1px solid var(--border-gold);
+        border-right: none;
+      }
+      .story-side {
+        padding: 32px 22px;
+      }
+      .story-side h3 {
+        font-size: clamp(22px, 5.5vw, 28px);
+      }
+      .story-side p { font-size: 14px; }
+      .story-feature-list li { font-size: 13.5px; }
+      /* Portfolio strip — horizontal scroll preserved (it already has overflow-x:auto) */
+      .portfolio-strip {
+        padding-bottom: 16px;
+      }
+      .portfolio-card {
+        flex: 0 0 140px;
+        padding: 20px 16px;
+      }
+      .portfolio-card .num {
+        font-size: 26px;
+      }
+      .portfolio-card .name {
+        font-size: 9px;
+      }
+
+      /* ─── Buyer Qualification ─── */
+      .qualification-matrix {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .qual-panel {
+        padding: 28px 20px;
+      }
+      .qual-panel-header h3 { font-size: 18px; }
+      .qual-item { font-size: 14px; }
+
+      /* ─── Site Visit Form ─── */
+      .site-visit-form-box {
+        padding: 28px 18px 32px;
+        border-radius: var(--radius-md);
+      }
+      .site-visit-form-box h2 {
+        font-size: clamp(22px, 6vw, 30px);
+        margin-bottom: 8px;
+      }
+      .site-visit-form-box p.sub {
+        font-size: 14.5px;
+        margin-bottom: 24px;
+        max-width: 100%;
+      }
+      .form-group-block {
+        margin-bottom: 22px;
+      }
+      .form-group-label {
+        font-size: 10.5px;
+        letter-spacing: 0.1em;
+        margin-bottom: 10px;
+      }
+      .pill-selector-row {
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .pill-radio-label {
+        padding: 10px 14px;
+        font-size: 13px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
+      .inputs-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 20px;
+      }
+      /* CRITICAL: 16px minimum on iOS prevents auto-zoom on focus */
+      .form-text-input,
+      .faq-search-input {
+        font-size: 16px !important;
+        padding: 14px 16px;
+      }
+      .form-actions-area {
+        margin-top: 24px;
+        gap: 14px;
+      }
+      .form-actions-area .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 16px;
+        font-size: 13px;
+        min-height: 50px;
+      }
+      .form-trust-note {
+        font-size: 12px;
+      }
+
+      /* ─── FAQ ─── */
+      .faq-search-box {
+        margin-bottom: 22px;
+      }
+      .faq-item summary {
+        padding: 18px 4px;
+        font-size: 15.5px;
+        gap: 12px;
+      }
+      .faq-toggle-icon {
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+      .faq-answer {
+        padding: 0 4px 20px;
+        font-size: 14.5px;
+        line-height: 1.68;
+        max-width: 100%;
+      }
+
+      /* ─── Footer ─── */
+      footer {
+        padding: 52px 0 100px; /* bottom pad accommodates mobile sticky bar */
+      }
+      .footer-columns {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .footer-brand h2 {
+        font-size: 22px;
+      }
+      .footer-brand p {
+        font-size: 13.5px;
+        max-width: 100%;
+      }
+      .footer-col h4 {
+        font-size: 10.5px;
+        margin-bottom: 14px;
+      }
+      .footer-col a, .footer-col span {
+        font-size: 13.5px;
+        margin-bottom: 10px;
+      }
+      .legal-disclaimer-box {
+        margin-top: 32px;
+        padding-top: 24px;
+        font-size: 11.5px;
+      }
+      .footer-bottom-line {
+        margin-top: 18px;
+        font-size: 11px;
+      }
+
+      /* ─── Floating Desktop FABs — hidden on mobile ─── */
+      .floating-desktop-actions {
+        display: none !important;
+      }
+
+      /* ─── Mobile Sticky Bar — safe area for notched phones ─── */
+      .mobile-sticky-bar {
+        padding: 10px 12px;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
+        gap: 8px;
+      }
+      .ms-btn {
+        padding: 10px 6px;
+        font-size: 10.5px;
+        min-height: 44px;
+        gap: 5px;
+      }
+      .ms-btn svg {
+        width: 16px;
+        height: 16px;
+      }
     }
 
-    /* Extra small phones (max-width: 380px) */
-    @media (max-width: 380px) {
-      .hero-h1 { font-size: 32px; }
-      .hero-price-anchor .val { font-size: 30px; }
-      .trust-proof-grid { grid-template-columns: 1fr; }
-      .deck-thumb-strip { display: none; } /* too cramped — hide thumb strip */
+    /* ─── 480px and below: Small Mobile ─── */
+    @media (max-width: 480px) {
+      .wrap, .wrap-narrow {
+        padding: 0 14px;
+      }
+      .section {
+        padding: 52px 0;
+      }
+      .hero {
+        padding: 90px 0 96px;
+      }
+      .hero-content {
+        padding: 0 14px;
+      }
+      .hero-h1 {
+        font-size: clamp(30px, 8.5vw, 40px);
+      }
+      .hero-h1 .gold-line {
+        font-size: clamp(24px, 7.5vw, 34px);
+      }
+      .hero-price-anchor .val {
+        font-size: clamp(26px, 8vw, 36px);
+      }
+      /* Trust strip: stack to 1 column */
+      .trust-proof-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      /* Table: make cells tighter */
+      .pvf-table th, .pvf-table td {
+        padding: 10px 8px;
+        font-size: 11.5px;
+      }
+      /* Masterplan SVG: make slightly smaller so it reveals more of the map */
+      .masterplan-svg {
+        width: 750px;
+      }
+      /* Deck stage: taller for content */
+      .deck-stage {
+        height: 720px;
+      }
+      /* Amenity card: compact image */
+      .amenity-card-media {
+        height: clamp(160px, 38vw, 220px);
+      }
+      /* Corridor flow: single column */
+      .corridor-flow-item {
+        grid-template-columns: 32px 1fr;
+        gap: 12px;
+        padding: 16px 0;
+      }
+      /* Qual panel */
+      .qual-panel {
+        padding: 22px 16px;
+      }
+      /* Form box */
+      .site-visit-form-box {
+        padding: 22px 14px 28px;
+      }
+      /* Pillar cards: no min height */
+      .pillar-card {
+        padding: 22px 18px;
+      }
+      .positioning-card {
+        padding: 22px 16px;
+      }
+      /* Footer pad for sticky bar */
+      footer {
+        padding-bottom: 110px;
+      }
+    }
+
+    /* ─── 375px and below: iPhone SE and small Androids ─── */
+    @media (max-width: 375px) {
+      .hero-h1 {
+        font-size: 28px;
+      }
+      .hero-h1 .gold-line {
+        font-size: 22px;
+      }
+      .hero-price-anchor .val {
+        font-size: 26px;
+      }
+      .hero-sub {
+        font-size: 13.5px;
+      }
+      h2 {
+        font-size: 22px;
+      }
+      /* Masterplan: minimum usable size */
+      .masterplan-svg {
+        width: 640px;
+      }
+      /* Thumbnail strip: hide on very small screens — too cramped */
+      .deck-thumbnails-strip {
+        display: none;
+      }
+      /* Deck stage: compensate for hidden thumbnails */
+      .deck-stage {
+        height: 660px;
+      }
+      .btn-row .btn {
+        font-size: 12px;
+        padding: 14px 12px;
+        letter-spacing: 0.04em;
+      }
+      .pill-radio-label {
+        font-size: 12px;
+        padding: 9px 12px;
+      }
+      .ms-btn {
+        font-size: 9.5px;
+        gap: 4px;
+      }
+      .ms-btn svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    /* ─── Landscape mobile: 568px and below, landscape orientation ─── */
+    @media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+      .hero {
+        min-height: unset;
+        padding: 80px 0 60px;
+      }
+      .deck-stage {
+        height: 500px;
+      }
+      .amenity-card-media {
+        height: 200px;
+      }
+      footer {
+        padding-bottom: 80px;
+      }
     }
 
   </style>
