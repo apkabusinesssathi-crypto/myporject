@@ -6781,27 +6781,41 @@
             timeline: timeline
           });
 
-          // --- Google Apps Script Lead Capture (POST) ---
-          // Sends lead data to Google Sheet via Apps Script Web App.
-          // Does NOT block WhatsApp redirect or break any existing functionality.
+          // --- Google Apps Script Lead Capture (Hidden Form POST) ---
+          // Uses a hidden <form> targeting a hidden <iframe> so the browser sends
+          // a genuine application/x-www-form-urlencoded POST with no CORS preflight.
+          // Apps Script receives all values through e.parameter. User stays on page.
           (function sendLeadToSheet(n, p, b, pr, vt) {
             var GAS_URL = 'https://script.google.com/macros/s/AKfycbzXUHDpiejt1Iko6vVaYlAod5MLWX14_-YpMy7PX4K32rsIz8CBvJvDqYmMBKVa2hj4/exec';
-            var params = new URLSearchParams();
-            params.append('name', n);
-            params.append('phone', p);
-            params.append('budget', b);
-            params.append('propertyRequirement', pr);
-            params.append('visitTimeline', vt);
-            fetch(GAS_URL, {
-              method: 'POST',
-              mode: 'no-cors',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: params.toString()
-            }).catch(function(err) {
-              // Silent fail — WhatsApp redirect is the primary lead path.
-              // Errors here do not affect the user experience.
-              console.warn('[TechVision Lead] Apps Script POST failed:', err);
-            });
+            try {
+              var iframeId = 'gas-lead-sink';
+              var iframe = document.getElementById(iframeId);
+              if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = iframeId;
+                iframe.name = iframeId;
+                iframe.style.cssText = 'display:none;width:0;height:0;border:0;position:absolute;left:-9999px;';
+                document.body.appendChild(iframe);
+              }
+              var hiddenForm = document.createElement('form');
+              hiddenForm.method = 'POST';
+              hiddenForm.action = GAS_URL;
+              hiddenForm.target = iframeId;
+              hiddenForm.style.cssText = 'display:none;';
+              var fields = { name: n, phone: p, budget: b, propertyRequirement: pr, visitTimeline: vt, source: 'Website' };
+              Object.keys(fields).forEach(function(key) {
+                var inp = document.createElement('input');
+                inp.type = 'hidden';
+                inp.name = key;
+                inp.value = fields[key] || '';
+                hiddenForm.appendChild(inp);
+              });
+              document.body.appendChild(hiddenForm);
+              hiddenForm.submit();
+              if (hiddenForm.parentNode) { hiddenForm.parentNode.removeChild(hiddenForm); }
+            } catch (err) {
+              console.warn('[TechVision Lead] Hidden form POST failed:', err);
+            }
           })(name, phone, budget, propertyType, timeline);
           // --- End Google Apps Script Lead Capture ---
 
