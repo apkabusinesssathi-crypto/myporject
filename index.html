@@ -6760,14 +6760,16 @@
 
         form.addEventListener('submit', function (e) {
           e.preventDefault();
-          var formData = new FormData(form);
-          var name = (formData.get('userName') || '').toString().trim();
-          var phone = (formData.get('userPhone') || '').toString().trim();
-          var budget = formData.get('budget') || '₹45–55L';
-          var propertyType = formData.get('propertyType') || 'Residential Plot';
-          var timeline = formData.get('timeline') || 'This Weekend';
 
-          // Validate required fields before tracking and redirecting
+          // Read field values
+          var formData = new FormData(form);
+          var name        = (formData.get('userName')    || '').toString().trim();
+          var phone       = (formData.get('userPhone')   || '').toString().trim();
+          var budget      = formData.get('budget')       || '\u20b945-55L';
+          var propertyType = formData.get('propertyType') || 'Residential Plot';
+          var timeline    = formData.get('timeline')     || 'This Weekend';
+
+          // Validate required fields (unchanged)
           if (!name || !phone) {
             alert('Please enter your name and phone number to schedule a site visit.');
             return;
@@ -6781,54 +6783,78 @@
             timeline: timeline
           });
 
-          // --- Google Apps Script Lead Capture (Hidden Form POST) ---
-          // Uses a hidden <form> targeting a hidden <iframe> so the browser sends
-          // a genuine application/x-www-form-urlencoded POST with no CORS preflight.
-          // Apps Script receives all values through e.parameter. User stays on page.
-          (function sendLeadToSheet(n, p, b, pr, vt) {
-            var GAS_URL = 'https://script.google.com/macros/s/AKfycbzXUHDpiejt1Iko6vVaYlAod5MLWX14_-YpMy7PX4K32rsIz8CBvJvDqYmMBKVa2hj4/exec';
-            try {
-              var iframeId = 'gas-lead-sink';
-              var iframe = document.getElementById(iframeId);
-              if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.id = iframeId;
-                iframe.name = iframeId;
-                iframe.style.cssText = 'display:none;width:0;height:0;border:0;position:absolute;left:-9999px;';
-                document.body.appendChild(iframe);
+          // ── Google Apps Script Lead Submission ───────────────────────────────────
+          // Endpoint: new Google Sheet connected Apps Script (v2)
+          // Method: fetch POST with URLSearchParams → Apps Script reads via e.parameter
+          // mode: 'no-cors' avoids OPTIONS preflight; Apps Script accepts simple POSTs.
+          // Promise resolves on any network-reachable response (opaque); rejects only
+          // on genuine network failure (offline / DNS error), which we surface as error.
+          var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwk6QtGGJBDH_WO_aqi-m24jaNOLOUCNu6EDpq50YOLXBu5pB2U1RFHPG2BoDIgbAywVA/exec';
+
+          var submitBtn = form.querySelector('[type="submit"]');
+          var originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Sending\u2026';
+          }
+
+          var params = new URLSearchParams();
+          params.append('name',                name);
+          params.append('phone',               phone);
+          params.append('budget',              budget);
+          params.append('propertyRequirement', propertyType);
+          params.append('visitTimeline',       timeline);
+          params.append('source',              'Website');
+
+          fetch(GAS_ENDPOINT, { method: 'POST', mode: 'no-cors', body: params })
+            .then(function () {
+              // Request reached Google — show success, reset form, open WhatsApp
+              showLeadStatus(form, '\u2713 Booking request received! WhatsApp confirmation coming shortly.', 'success');
+              form.reset();
+              var message = 'Hello, I would like to book a Site Visit for Mahalaxmi Nagar\u201351, Nagpur.\n' +
+                'Name: ' + name + '\n' +
+                'Phone: ' + phone + '\n' +
+                'Budget Range: ' + budget + '\n' +
+                'Requirement: ' + propertyType + '\n' +
+                'Timeline: ' + timeline + '\n' +
+                'Please confirm site visit slots and directions.';
+              window.open(getWhatsAppUrl(message), '_blank');
+            })
+            .catch(function (err) {
+              // Network failure — do not pretend success
+              showLeadStatus(form, 'Could not send your booking request. Please try WhatsApp or call us directly.', 'error');
+              console.warn('[Lead] Submission failed:', err);
+            })
+            .finally(function () {
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHTML;
               }
-              var hiddenForm = document.createElement('form');
-              hiddenForm.method = 'POST';
-              hiddenForm.action = GAS_URL;
-              hiddenForm.target = iframeId;
-              hiddenForm.style.cssText = 'display:none;';
-              var fields = { name: n, phone: p, budget: b, propertyRequirement: pr, visitTimeline: vt, source: 'Website' };
-              Object.keys(fields).forEach(function(key) {
-                var inp = document.createElement('input');
-                inp.type = 'hidden';
-                inp.name = key;
-                inp.value = fields[key] || '';
-                hiddenForm.appendChild(inp);
-              });
-              document.body.appendChild(hiddenForm);
-              hiddenForm.submit();
-              if (hiddenForm.parentNode) { hiddenForm.parentNode.removeChild(hiddenForm); }
-            } catch (err) {
-              console.warn('[TechVision Lead] Hidden form POST failed:', err);
-            }
-          })(name, phone, budget, propertyType, timeline);
-          // --- End Google Apps Script Lead Capture ---
-
-          var message = "Hello, I would like to book a Site Visit for Mahalaxmi Nagar\u201351, Nagpur.\n" +
-            "Name: " + name + "\n" +
-            "Phone: " + phone + "\n" +
-            "Budget Range: " + budget + "\n" +
-            "Requirement: " + propertyType + "\n" +
-            "Timeline: " + timeline + "\n" +
-            "Please confirm site visit slots and directions.";
-
-          window.open(getWhatsAppUrl(message), '_blank');
+            });
+          // ── End Google Apps Script Lead Submission ────────────────────────────────
         });
+
+        // Inline status message helper (no design changes — uses existing form area)
+        function showLeadStatus(formEl, message, type) {
+          var existing = formEl.parentNode.querySelector('.gas-lead-status');
+          if (existing) { existing.parentNode.removeChild(existing); }
+          var el = document.createElement('p');
+          el.className = 'gas-lead-status';
+          el.textContent = message;
+          el.style.cssText = [
+            'margin-top:14px',
+            'padding:12px 16px',
+            'border-radius:8px',
+            'font-size:13px',
+            'font-weight:500',
+            'text-align:center',
+            type === 'success'
+              ? 'background:rgba(74,222,128,0.12);color:#22c55e;border:1px solid rgba(74,222,128,0.3);'
+              : 'background:rgba(239,68,68,0.10);color:#ef4444;border:1px solid rgba(239,68,68,0.25);'
+          ].join(';');
+          formEl.parentNode.appendChild(el);
+          setTimeout(function() { if (el.parentNode) { el.parentNode.removeChild(el); } }, 7000);
+        }
       }
 
       // Major Landmark Section View Tracker (IntersectionObserver - Exactly Once per Section)
